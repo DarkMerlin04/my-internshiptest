@@ -1,5 +1,5 @@
-const Transaction = require('../model/transaction')
-const User = require('../model/user')
+const Transaction = require('../models/transaction')
+const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 const transfer = async (req, res, next) => {
