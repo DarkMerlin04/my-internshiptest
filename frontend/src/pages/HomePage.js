@@ -10,11 +10,13 @@ import Withdraw from '../components/Withdraw';
 import Transfer from '../components/Transfer';
 import History from '../components/History';
 import axios from 'axios';
+import { Link} from 'react-router-dom';
 
 export default function HomePage() {
   const [open, setOpen] = useState(true);
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [option, setOption] = useState("Deposit");
+  
   useEffect(() => {
     if (option === "Deposit")
     {
@@ -34,7 +36,7 @@ export default function HomePage() {
     }
   }, [option])
 
-  const logout = async () => {
+  const login = async () => {
     try {
       await axios.post(`${process.env.REACT_APP_API}/auth/logout`,{
         withCredentials : true
@@ -77,10 +79,11 @@ export default function HomePage() {
             <span className={`font-medium ${!open && "hidden"}`} >History</span>
           </li>
         </ul>
-
-        <button onClick={logout} className={`bg-blue-300 p-2 rounded-md mt-4 text-base font-medium ${!open && "hidden"}`}>
-          Logout
+        <Link to="/login">
+        <button onClick={login} className={`bg-blue-300 p-2 rounded-md mt-4 text-base font-medium ${!open && "hidden"}`}>
+          Login
         </button>
+        </Link>
       </div>
       <div className='bg-white w-full flex items-center justify-center'>
         <div className=''>

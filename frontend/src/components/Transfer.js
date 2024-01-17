@@ -1,31 +1,26 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { userContext } from '../UserContext';
+import Swal from 'sweetalert2';
 
 export default function Transfer() {
     const [amount, setAmount] = useState('');
     const {user} = useContext(userContext);
     const [targetUser, setTargetUser] = useState('');
-
-    // const getUserData = async () => {
-    //     try{
-    //         const getUser = await axios.post(`${process.env.REACT_APP_API}/auth/userbyname`, {
-    //             username: targetUser,
-    //         }, {withCredentials: true});
-    //         return getUser.data
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-    // getUserData();
+    
+    const alertSuccess = () => {
+        Swal.fire({
+          title: "Transfer Successfully",
+          icon: "success"
+        });
+      }
 
     const createTransfer = async () => {
         try {
             const getUser = await axios.post(`${process.env.REACT_APP_API}/auth/userbyname`, {
                 username: targetUser,
             }, {withCredentials: true});
-            
+
             const response = await axios.post(`${process.env.REACT_APP_API}/transaction/transfer`, {
                 sender: user._id,
                 receiver: getUser.data._id,
@@ -33,8 +28,8 @@ export default function Transfer() {
                 type: "Transfer"
             }, {withCredentials: true});
             console.log('Transfer created:', response.data);
-
             setAmount('');
+            alertSuccess();
         } catch (error) {
             console.error('Error creating deposit:', error);
         }

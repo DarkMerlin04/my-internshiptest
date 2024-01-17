@@ -1,10 +1,18 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { userContext } from '../UserContext';
+import Swal from 'sweetalert2';
 
 export default function Withdraw() {
     const [amount, setAmount] = useState('');
     const {user} = useContext(userContext);
+
+    const alertSuccess = () => {
+        Swal.fire({
+          title: "Withdraw Successfully",
+          icon: "success"
+        });
+      }
 
     const createWithdraw = async () => {
         try {
@@ -15,8 +23,8 @@ export default function Withdraw() {
                 type: "Withdraw"
             }, {withCredentials: true});
             console.log('Withdraw created:', response.data);
-
             setAmount('');
+            alertSuccess();
         } catch (error) {
             console.error('Error creating deposit:', error);
         }

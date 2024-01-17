@@ -72,19 +72,19 @@ export default function History() {
                             Datetime
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            From
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Remain
-                        </th>
-                        <th scope="col" class="px-6 py-3">
                             Action
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            TO
+                            From
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            To
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Amount
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Remain
                         </th>
                     </tr>
                 </thead>
@@ -95,19 +95,19 @@ export default function History() {
                                 {item.timestamp}
                             </td>
                             <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                {item.sender.username}
-                            </td>
-                            <td class="px-6 py-4">
-                                {item.sender.balance}
-                            </td>
-                            <td class="px-6 py-4">
                                 {item.type}
+                            </td>
+                            <td class="px-6 py-4">
+                                {item.sender.username}
                             </td>
                             <td class="px-6 py-4">
                                 {item.receiver.username}
                             </td>
                             <td class="px-6 py-4">
                                 {item.amount}
+                            </td>
+                            <td class="px-6 py-4">
+                                {item.sender.balance}
                             </td>
                         </tr>
                     ))}
