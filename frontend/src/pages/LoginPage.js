@@ -42,13 +42,6 @@ export default function LoginPage() {
     });
   }
 
-  const alertFormError = (err_msg) => {
-    Swal.fire({
-      icon: 'error',
-      text: err_msg,
-    })
-  }
-
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value })
@@ -57,21 +50,6 @@ export default function LoginPage() {
   const onChangeFocusedInput = (e, isFocused) => {
     const { name } = e.target;
     setFocusedData({ ...focusedData, [name]: isFocused })
-  }
-
-  const validateNamePassword = () => {
-    const testName = (/^\s*$/gm).test(userData.username);
-    const testPassword = (/^\s*$/gm).test(userData.password);
-    if (testName) {
-      setError("Username can't be empty");
-    }
-    else if (testPassword) {
-      setError("Password can't be empty");
-    } else {
-      setError('');
-      return true;
-    }
-    return false;
   }
 
   const togglePasswordVisibility = () => {
@@ -85,11 +63,11 @@ export default function LoginPage() {
           withCredentials : true
         })
         setUser(logInUser.data)
-        // alertLoginSuccess()
+        alertLogInSuccess()
         navigate('/')
     } catch (err) {
         console.log(err)
-        // alertLoginFail(err.response.data.message) 
+        alertLoginFail(err.response.data.message) 
     }
 }
 

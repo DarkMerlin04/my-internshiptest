@@ -73,4 +73,51 @@ const profile = async (req,res,next) => {
     }
 }
 
-module.exports = { login, register, logout, profile }
+const deleteUser = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+
+        const deleteUserId = await User.findById(userId);
+
+        if(!deleteUserId) {
+            return res.status(404).send('User ID not found!');
+        }
+
+        await User.findByIdAndDelete(userId);
+
+        res.status(200).send({
+            message: `Deleted ${userId} from database`
+        });
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+const getUserByUsername= async (req, res, next) => {
+    const { username } = req.body
+
+    const { token } = req.cookies
+    if(!token)
+    {
+        return res.status(404).send('User not loged in!')
+    }
+
+    const data = jwt.verify(token, process.env.JWT_SECRET)
+    if(!data)
+    {
+        return res.status(404).send('You are not unauthorize!')
+    }
+
+    try {
+        const user = await User.findOne({ username })
+        if(!user)
+        {
+            return res.status(404).send('User not found!');
+        }
+        return res.status(200).json(user)
+    } catch(err){
+        console.log(err);
+    }
+}
+
+module.exports = { login, register, logout, profile, deleteUser, getUserByUsername }

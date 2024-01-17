@@ -9,6 +9,7 @@ import Deposit from '../components/Deposit';
 import Withdraw from '../components/Withdraw';
 import Transfer from '../components/Transfer';
 import History from '../components/History';
+import axios from 'axios';
 
 export default function HomePage() {
   const [open, setOpen] = useState(true);
@@ -32,6 +33,19 @@ export default function HomePage() {
       setSelectedComponent(<History/>)
     }
   }, [option])
+
+  const logout = async () => {
+    try {
+      await axios.post(`${process.env.REACT_APP_API}/auth/logout`,{
+        withCredentials : true
+      });
+      console.log('Logged out successfully');
+
+    } catch (error) {
+      console.error('Error logging out:', error);
+
+    }
+  };
 
   return (
     <div className="flex">
@@ -64,13 +78,13 @@ export default function HomePage() {
           </li>
         </ul>
 
-        {/* <button className={`bg-blue-300 p-2 rounded-md mt-4 text-base font-medium ${!open && "hidden"}`}>
+        <button onClick={logout} className={`bg-blue-300 p-2 rounded-md mt-4 text-base font-medium ${!open && "hidden"}`}>
           Logout
-        </button> */}
+        </button>
       </div>
       <div className='bg-white w-full flex items-center justify-center'>
         <div className=''>
-        {selectedComponent}
+          {selectedComponent}
         </div>
       </div>
     </div>
