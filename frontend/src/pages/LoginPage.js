@@ -81,8 +81,9 @@ export default function LoginPage() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-        const logInUser = await axios.post(`${process.env.REACT_APP_API}/auth/login`, { ...userData }, {withCredentials : trues})
-        console.log(LoginPage)
+        const logInUser = await axios.post(`${process.env.REACT_APP_API}/auth/login`, { ...userData }, {
+          withCredentials : true
+        })
         setUser(logInUser.data)
         // alertLoginSuccess()
         navigate('/')

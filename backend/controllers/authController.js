@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const createError = require('http-errors');
 
 const register = async (req, res, next) => {
     const { username, password } = req.body
@@ -23,33 +24,31 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try{
-        const user = await User.findOne({ email })
+        
+        const user = await User.findOne({ username })
         if (!user) {
-            return next(createError(404, "User not found!"))
+            return res.status(404).send('Username already taken')
         }
-        const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password)
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
         if (!isPasswordCorrect) {
-            return next(createError(400, "Wrong password !"))
+            return res.status(404).send('Username already taken')
         }
 
         //create token
         const token = jwt.sign({
             id: user._id,
-            email : user.email
+            username : user.username
         },process.env.JWT_SECRET)
-
-        const {password,...otherData} = user._doc;
 
         res.cookie("token",token,{
             httpOnly: true
-        }).status(200).json({...otherData})
+        }).status(200).json(user)
     }
     
     catch(err){
         console.log(err)
-        next(createError(400, "Login fail !"));      
     }
 }
 
