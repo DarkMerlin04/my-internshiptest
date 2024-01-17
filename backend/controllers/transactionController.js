@@ -31,6 +31,11 @@ const transfer = async (req, res, next) => {
             return res.status(404).send('Your balance is not enough!')
         }
 
+        if(!receiverUser)
+        {
+            return res.status(404).send('Receiver is uncorrect')
+        }
+
         await User.findByIdAndUpdate(
             { _id : senderUser._id },
             { balance : senderUser.balance - amount },
@@ -72,6 +77,8 @@ const deposit = async (req, res, next) => {
         }
 
         const data = jwt.verify(token, process.env.JWT_SECRET)
+        console.log(data)
+        console.log(sender)
         if(data.id != sender)
         {
             return res.status(404).send('You are not unauthorize!')
@@ -146,6 +153,31 @@ const withdraw = async (req, res, next) => {
     } catch(error) {
         console.log(error)
     }
-
 }
-module.exports = { transfer, deposit, withdraw }
+
+const getTransactions = async (req, res, next) => {
+    const transaction = await Transaction.find().populate('sender').populate('receiver');
+    res.status(200).json(transaction);
+}
+
+const deleteTransactions = async (req, res, next) => {
+    try {
+        const transactionId = req.params.id;
+
+        const deleteTransactionId = await Transaction.findById(transactionId);
+    
+        if(!deleteTransactionId) {
+            return res.status(404).send('Transaction ID not found!');
+        }
+    
+        await Transaction.findByIdAndDelete(transactionId);
+
+        res.status(200).send({
+            message: `Deleted ${transactionId} from database`
+        });
+    } catch(error)
+    {
+        console.log(error)
+    }
+}
+module.exports = { transfer, deposit, withdraw, getTransactions, deleteTransactions }
