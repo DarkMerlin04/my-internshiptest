@@ -146,6 +146,10 @@ const withdraw = async (req, res, next) => {
     } catch(error) {
         console.log(error)
     }
-
 }
-module.exports = { transfer, deposit, withdraw }
+
+const getTransactions = async (req, res, next) => {
+    const transaction = await Transaction.find();
+    res.status(200).json(transaction);
+}
+module.exports = { transfer, deposit, withdraw, getTransactions }
